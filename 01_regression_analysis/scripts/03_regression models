@@ -1,0 +1,35 @@
+# =========================
+# 3. MULTIPLE LINEAR REGRESSION
+# =========================
+
+# Full model
+model_full <- lm(MONTHLY_EXPENDITURE ~ GEOGRAPHIC_AREA +
+                   HOUSEHOLD_TYPE +
+                   EMPLOYMENT_STATUS +
+                   EXPENDITURE_TYPE,
+                 data = data)
+
+summary(model_full)
+
+# Alternative models
+model_no_employment <- lm(MONTHLY_EXPENDITURE ~ GEOGRAPHIC_AREA +
+                            HOUSEHOLD_TYPE +
+                            EXPENDITURE_TYPE,
+                          data = data)
+
+model_no_area <- lm(MONTHLY_EXPENDITURE ~ HOUSEHOLD_TYPE +
+                      EMPLOYMENT_STATUS +
+                      EXPENDITURE_TYPE,
+                    data = data)
+
+model_reduced <- lm(MONTHLY_EXPENDITURE ~ HOUSEHOLD_TYPE +
+                      EXPENDITURE_TYPE,
+                    data = data)
+
+# Model comparison
+anova(model_no_employment, model_full)
+anova(model_no_area, model_full)
+anova(model_reduced, model_full)
+
+# AIC comparison
+AIC(model_full, model_no_employment, model_no_area, model_reduced)
