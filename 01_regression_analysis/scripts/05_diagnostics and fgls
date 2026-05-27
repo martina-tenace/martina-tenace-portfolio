@@ -1,0 +1,54 @@
+# =========================
+# 4. MODEL DIAGNOSTICS & ROBUST METHODS
+# =========================
+
+library(tseries)
+library(lmtest)
+library(sandwich)
+
+# Normality test (Jarque-Bera)
+jarque.bera.test(residuals(model_full))
+
+# Heteroskedasticity tests
+bptest(model_full, studentize = FALSE)
+bptest(model_full, studentize = TRUE)
+
+# Autocorrelation test
+dwtest(model_full)
+
+# Residual plots
+qqnorm(residuals(model_full))
+qqline(residuals(model_full), col = "red")
+
+par(mfrow = c(2,2))
+plot(model_full)
+
+# Robust standard errors
+coeftest(model_full, vcov = vcovHC(model_full, "HC0"))
+
+# =========================
+# FGLS ESTIMATION
+# =========================
+
+residuals_model <- residuals(model_full)
+g <- log(residuals_model^2)
+
+aux_model <- lm(g ~ GEOGRAPHIC_AREA +
+                  HOUSEHOLD_TYPE +
+                  EMPLOYMENT_STATUS +
+                  EXPENDITURE_TYPE,
+                data = data)
+
+weights <- 1 / exp(fitted(aux_model))
+
+fgls_model <- lm(MONTHLY_EXPENDITURE ~ GEOGRAPHIC_AREA +
+                   HOUSEHOLD_TYPE +
+                   EMPLOYMENT_STATUS +
+                   EXPENDITURE_TYPE,
+                 data = data,
+                 weights = weights)
+
+summary(fgls_model)
+
+# Final heteroskedasticity check
+bptest(fgls_model)
