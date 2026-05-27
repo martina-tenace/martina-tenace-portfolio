@@ -1,0 +1,28 @@
+# =========================
+# 2. EXPLORATORY DATA ANALYSIS
+# =========================
+
+library(ggplot2)
+
+# Distribution of household expenditure
+ggplot(data, aes(MONTHLY_EXPENDITURE)) +
+  geom_histogram(bins = 30, fill = "lightblue") +
+  theme_minimal() +
+  labs(title = "Distribution of Monthly Household Expenditure",
+       x = "Expenditure (€)",
+       y = "Frequency")
+
+# Boxplot of expenditure
+boxplot(data$MONTHLY_EXPENDITURE,
+        horizontal = TRUE,
+        col = "lightblue",
+        main = "Monthly Household Expenditure")
+
+# Expenditure by category
+levels(data$EXPENDITURE_TYPE) <- c("Housing", "Education", "Food",
+                                   "Leisure", "Health", "Transport")
+
+boxplot(MONTHLY_EXPENDITURE ~ EXPENDITURE_TYPE, data = data,
+        col = "skyblue",
+        las = 2,
+        main = "Expenditure by Category")
