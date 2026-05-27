@@ -1,0 +1,26 @@
+# =========================
+# 1. DATA IMPORT & CLEANING
+# =========================
+
+library(tidyverse)
+library(readxl)
+
+# Load dataset
+data <- istat_household_data
+
+# Initial exploration
+glimpse(data)
+summary(data)
+
+# Data preprocessing
+data <- data %>%
+  mutate(
+    HOUSEHOLD_TYPE = as.factor(NUCLEO_FAMILIARE),
+    EMPLOYMENT_STATUS = as.factor(OCCUPAZIONE),
+    EXPENDITURE_TYPE = as.factor(TIPO_DI_SPESA),
+    GEOGRAPHIC_AREA = as.factor(AREA_GEOGRAFICA),
+    MONTHLY_EXPENDITURE = as.numeric(SPESA_MEDIA)
+  )
+
+# Missing values check
+sum(is.na(data))
